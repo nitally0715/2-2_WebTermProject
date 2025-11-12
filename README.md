@@ -17,6 +17,7 @@
 	- 프론트엔드 : HTML, CSS, JS
 	- 백엔드 : PHP, Node.js
 	- RDBMS : mySQL
+	- 컨테이너 / 배포 환경 : Docker
 
 ## 팀 멤버 별 담당 업무
 
