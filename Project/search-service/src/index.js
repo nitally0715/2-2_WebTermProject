@@ -1,10 +1,14 @@
+// Express.js 기반[Node.js의 대표적인 웹 프레임워크]의 간단한 REST API
+// 사용자가 보낸 검색어로 위키백과에 요청 -> 결과 가공후 json 형태로 변환
 import express from 'express';
-import fetch from 'node-fetch';
+import fetch from 'node-fetch'; 
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+// 위키백과 API endpoint 한국어 ver
 const WIKI_ENDPOINT = 'https://ko.wikipedia.org/w/api.php';
 
+// 라우트 정의
 app.get('/search', async (req, res) => {
     const query = (req.query.q ?? '').toString().trim();
 
@@ -13,6 +17,7 @@ app.get('/search', async (req, res) => {
         return;
     }
 
+    // 위키백과 API에 필요한 파라미터
     const params = new URLSearchParams({
         action: 'query',
         format: 'json',
@@ -21,9 +26,11 @@ app.get('/search', async (req, res) => {
         utf8: '1',
     });
 
+    // 무한 대기 Deadlock, 서버 응답 지연 방지
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 5000);
 
+    // API 호출
     try {
         const response = await fetch(`${WIKI_ENDPOINT}?${params.toString()}`, {
             headers: {
@@ -36,6 +43,7 @@ app.get('/search', async (req, res) => {
             throw new Error(`Remote API error: ${response.status}`);
         }
 
+        // 결과 파싱 및 가공
         const data = await response.json();
         const items = data?.query?.search ?? [];
         const results = items.map((entry) => ({
@@ -51,6 +59,5 @@ app.get('/search', async (req, res) => {
     }
 });
 
-app.listen(PORT, () => {
-    // Deliberately avoiding user data logging for compliance with project rules.
-});
+// Express 서버 시작
+app.listen(PORT, () => {});

@@ -1,6 +1,17 @@
+/* jctyping DB 생성, 명령들 jctyping DB 안에서 실행 */
 CREATE DATABASE IF NOT EXISTS jctyping CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 USE jctyping;
 
+/* users table[회원 정보] 
+    1. id (자동 증가하는 기본 키): AUTO_INCREMENT
+    2. 사용자 이름(unique)
+    3. 비밀번호(해시값)
+    4. 타자 연습 총 횟수
+    5. 퀴즈 총 풀이 수
+    6. 사용자 level(누적 성과 기반)
+    7. 최고 타자 속도
+    8. 계정 생성 시각
+*/
 CREATE TABLE IF NOT EXISTS users (
     id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -12,12 +23,23 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/* typing_sentences table[타자 연습 문장]: 언어별로 저장된 테이블
+    1. id(기본 키, int)
+    2. language: 프로그래밍 언어
+    3. sentence: text 연습 문장 내용 
+*/
 CREATE TABLE IF NOT EXISTS typing_sentences (
     id INT AUTO_INCREMENT PRIMARY KEY,
     language VARCHAR(50) NOT NULL,
     sentence TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/* quiz_questions table[퀴즈 문제] typing_sentence와 비슷한 구조와 목적
+    1. id
+    2. language: 프로그래밍 언어
+    3. keyword: 핵심 키워드(정답)
+    4. description: 해당 키워드의 설명 또는 문제 내용
+*/
 CREATE TABLE IF NOT EXISTS quiz_questions (
     id INT AUTO_INCREMENT PRIMARY KEY,
     language VARCHAR(50) NOT NULL,
@@ -25,6 +47,7 @@ CREATE TABLE IF NOT EXISTS quiz_questions (
     description TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+/* typing_sentence table에 저장: 공식 레퍼런스 참조하여 하드코딩으로 업데이트 예정 */
 INSERT INTO typing_sentences (language, sentence) VALUES
 ('C++', 'std::vector<int> scores = {1, 2, 3};'),
 ('C++', 'for(auto &item : container) { process(item); }'),
@@ -57,6 +80,7 @@ INSERT INTO typing_sentences (language, sentence) VALUES
 ('Python', 'paths = sorted(Path(".").glob("*.py"))'),
 ('Python', 'if __name__ == "__main__": main()');
 
+/* quiz_questions table에 저장: 상동 */
 INSERT INTO quiz_questions (language, keyword, description) VALUES
 ('C++', 'std::move', 'Casts an lvalue reference into an rvalue reference to trigger move semantics.'),
 ('C++', 'emplace_back', 'Constructs an element in-place at the end of a container.'),
