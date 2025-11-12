@@ -1,0 +1,62 @@
+[
+  {
+    "language": "C++",
+    "keyword": "std::move",
+    "description": "Casts an lvalue reference into an rvalue reference to trigger move semantics."
+  },
+  {
+    "language": "C++",
+    "keyword": "emplace_back",
+    "description": "Constructs an element in-place at the end of a container."
+  },
+  {
+    "language": "C++",
+    "keyword": "constexpr",
+    "description": "Marks a value or function that can be evaluated at compile time."
+  },
+  {
+    "language": "C++",
+    "keyword": "shared_ptr",
+    "description": "Reference-counted smart pointer that shares ownership."
+  },
+  {
+    "language": "Java",
+    "keyword": "Optional",
+    "description": "Container object used to express the presence or absence of a value."
+  },
+  {
+    "language": "Java",
+    "keyword": "synchronized",
+    "description": "Keyword that secures a critical section with a monitor lock."
+  },
+  {
+    "language": "Java",
+    "keyword": "Stream",
+    "description": "Abstraction that supports functional-style operations on collections."
+  },
+  {
+    "language": "Java",
+    "keyword": "record",
+    "description": "Concise syntax for immutable data carriers with generated members."
+  },
+  {
+    "language": "Python",
+    "keyword": "list comprehension",
+    "description": "Expression that builds a list from an iterable in a single line."
+  },
+  {
+    "language": "Python",
+    "keyword": "context manager",
+    "description": "Protocol that controls setup and teardown around a with block."
+  },
+  {
+    "language": "Python",
+    "keyword": "dataclass",
+    "description": "Decorator adding generated methods to simple data containers."
+  },
+  {
+    "language": "Python",
+    "keyword": "generator",
+    "description": "Function that yields lazy sequences using the yield keyword."
+  }
+]

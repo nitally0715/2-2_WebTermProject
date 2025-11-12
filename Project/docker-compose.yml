@@ -1,0 +1,42 @@
+version: '3.9'
+
+services:
+  web:
+    build: .
+    ports:
+      - '8080:80'
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: jctyping
+      MYSQL_USER: jctyping
+      MYSQL_PASSWORD: secret
+      SEARCH_API_URL: http://search:3000/search
+    depends_on:
+      db:
+        condition: service_healthy
+      search:
+        condition: service_started
+    volumes:
+      - ./app:/var/www/html
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: jctyping
+      MYSQL_USER: jctyping
+      MYSQL_PASSWORD: secret
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  search:
+    build:
+      context: ./search-service
+    ports:
+      - '8090:3000'
