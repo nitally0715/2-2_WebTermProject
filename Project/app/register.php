@@ -1,4 +1,5 @@
 <?php
+// [화면 1.2: 회원가입 ]
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/auth.php';
@@ -41,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h1 class="logo">회원가입</h1>
         <form method="post" class="form auth-form">
             <label>
-                <span>ID</span>
+                <span>USERNAME</span>
                 <input type="text" name="username" required minlength="3" autocomplete="username"
                        value="<?= isset($_POST['username']) ? h($_POST['username']) : '' ?>">
                 <?php if ($idError): ?>
@@ -55,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <?php if ($formErrors && !$idError): ?>
                 <p class="form-error"><?= h($formErrors[0]) ?></p>
             <?php endif; ?>
-            <button type="submit" class="primary">Register</button>
+            <button type="submit" class="primary">Register and Login</button>
         </form>
         <a class="secondary-link" href="/index.php">이미 계정이 있으신가요?</a>
     </main>

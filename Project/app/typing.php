@@ -1,4 +1,5 @@
 <?php
+// [화면 3.1: 타자연습]
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/auth.php';

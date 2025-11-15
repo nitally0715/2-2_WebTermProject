@@ -1,17 +1,22 @@
 <?php
+// [화면 2: login시 사용자 화면]
 declare(strict_types=1);
 
+// 로그인 여부 확인, 세션 유저, 로그아웃 기능 및 h() 등 공용 함수 가져오기
 require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/includes/functions.php';
 
+// 로그인 안 되어 있으면 index.php로 redirect
 require_login();
 
+// logout 처리
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['logout'])) {
     logout_user();
     header('Location: /index.php');
     exit;
 }
 
+// user 정보 로딩(점수 업데이트 등 DB 최신 정보 실시간으로 세션에 반영)
 $sessionUser = current_user();
 if ($sessionUser) {
     refresh_session_user((int) $sessionUser['id']);
@@ -23,6 +28,7 @@ if (!$sessionUser) {
     exit;
 }
 
+// 가입 날짜
 $joined = (new DateTime($sessionUser['created_at']))->format('Y-m-d H:i');
 ?>
 <!DOCTYPE html>

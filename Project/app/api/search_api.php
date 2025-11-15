@@ -1,4 +1,5 @@
 <?php
+// 위키피디아 검색 API
 declare(strict_types=1);
 
 require_once __DIR__ . '/../includes/auth.php';

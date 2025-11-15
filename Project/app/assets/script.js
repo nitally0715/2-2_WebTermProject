@@ -1,16 +1,20 @@
+// 핵심 Client Logic 전체를 담당
 const SECTION_HIDDEN_CLASS = 'hidden';
 
+// 페이지 로딩 시 초기화
 document.addEventListener('DOMContentLoaded', () => {
     initTyping();
     initQuiz();
     initSearch();
 });
 
+// 타자 연습 페이지 전용 로직
 function initTyping() {
     if (!document.body.matches('[data-page="typing"]')) {
         return;
     }
 
+    // 주요 DOM 요소 변수로 캐싱
     const data = window.typingData || {};
     const sentences = data.sentences || {};
     const sections = {
@@ -33,6 +37,7 @@ function initTyping() {
     const summaryAvg = document.getElementById('typing-summary-average');
     const summaryBest = document.getElementById('typing-summary-best');
 
+    // 게임 한 판에 20문장
     const TARGET_SENTENCES = 20;
 
     let rounds = [];
@@ -45,6 +50,7 @@ function initTyping() {
     let speedSum = 0;
     let speedCount = 0;
 
+    // 섹션(선택/게임/결과) 표시 <= CSS의 .hidden 클래스 toggle
     const showSection = (name) => {
         Object.entries(sections).forEach(([key, section]) => {
             if (!section) {
@@ -54,6 +60,7 @@ function initTyping() {
         });
     };
 
+    // 게임 데이터 초기화
     const resetGame = () => {
         rounds = [];
         index = 0;
@@ -70,6 +77,7 @@ function initTyping() {
         updateStats();
     };
 
+    // 상태 갱신
     const updateStats = () => {
         const completed = index;
         const total = rounds.length || TARGET_SENTENCES;
@@ -79,6 +87,7 @@ function initTyping() {
         counterEl.textContent = `${completed}/${total} 문장 완료`;
     };
 
+    // 현재 문장 화면에 출력
     const showSentence = () => {
         const current = rounds[index];
         if (!current) {
@@ -98,6 +107,7 @@ function initTyping() {
         const current = rounds[index];
         index += 1;
 
+        // 입력문장 타수 계산, 최고속도(bestSpeed) 업데이트, 총합 speedSum 누적
         const elapsedMinutes = Math.max((Date.now() - sentenceStart) / 60000, 0.01);
         const sentenceSpeed = Math.max(
             1,
@@ -108,6 +118,7 @@ function initTyping() {
         speedSum += sentenceSpeed;
         speedCount += 1;
 
+        // api/update_score.php 로 점수 전송
         updateStats();
         submitProgress('/api/update_score.php', {
             type: 'typing',
@@ -115,6 +126,7 @@ function initTyping() {
             bestSpeed,
         });
 
+        // 다음 문장 or 종료
         if (index >= rounds.length) {
             finishGame();
         } else {
@@ -122,6 +134,7 @@ function initTyping() {
         }
     };
 
+    // 게임 종료
     const finishGame = () => {
         const averageSpeed = speedCount ? Math.round(speedSum / speedCount) : 0;
         summaryAvg.textContent = averageSpeed.toString();
@@ -129,6 +142,7 @@ function initTyping() {
         showSection('summary');
     };
 
+    // 선택된 언어 목록으로 문장 pool 생성 (랜덤 선택)
     const startGame = (selectedLanguages) => {
         const pool = [];
         selectedLanguages.forEach((lang) => {
@@ -202,6 +216,7 @@ function initTyping() {
     showSection('select');
 }
 
+// 퀴즈 페이지 전용 로직
 function initQuiz() {
     if (!document.body.matches('[data-page="quiz"]')) {
         return;
@@ -406,6 +421,7 @@ function initQuiz() {
     showSection('select');
 }
 
+// 검색 페이지 전용 로직
 function initSearch() {
     if (!document.body.matches('[data-page="search"]')) {
         return;
@@ -472,6 +488,7 @@ function initSearch() {
     });
 }
 
+// 공용함수: 순서 랜덤 섞기
 function shuffle(array) {
     const clone = [...array];
     for (let i = clone.length - 1; i > 0; i -= 1) {
@@ -481,13 +498,12 @@ function shuffle(array) {
     return clone;
 }
 
+// 점수 서버에 전송(fetch API 호출)
 function submitProgress(url, payload) {
     fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
         credentials: 'same-origin',
-    }).catch(() => {
-        // intentionally swallow errors; progress can be retried later
-    });
+    }).catch(() => {});
 }

@@ -1,3 +1,4 @@
+/* 둥근모꼴 폰트 사용: 2D 게임 같은 폰트 */
 @font-face {
     font-family: 'RoundedFixedsys';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');

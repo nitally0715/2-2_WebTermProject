@@ -1,4 +1,5 @@
 <?php
+// [화면 3.3: 검색 기능]
 declare(strict_types=1);
 
 require_once __DIR__ . '/includes/auth.php';

@@ -34,6 +34,7 @@ services:
       MYSQL_DATABASE: jctyping
       MYSQL_USER: jctyping
       MYSQL_PASSWORD: secret
+      TZ: Asia/Seoul
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     # 컨테이너 상태 주기적 검사

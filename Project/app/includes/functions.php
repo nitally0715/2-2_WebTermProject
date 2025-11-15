@@ -1,13 +1,20 @@
 <?php
+// 공용함수
+// 1. HTML 출력용 보안 처리 
+// 2. 유저 정보 조회
+// 3. 타자문장 / 퀴즈문제 불러오기
+// 4. 타자 / 퀴즈 완료 후 DB 업데이트
 declare(strict_types=1);
 
 require_once __DIR__ . '/db.php';
 
+// HTML escape [XSS 보안 필수 함수]
 function h(?string $value): string
-{
+{   // <script> 같은 악성 문자열 그대로 태그로 해석되지 않도록 막아줌
     return htmlspecialchars($value ?? '', ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
 }
 
+// 유저 프로필 가져오기
 function fetch_user_profile(int $userId): ?array
 {
     $pdo = get_db();
@@ -21,6 +28,7 @@ function fetch_user_profile(int $userId): ?array
     return $user ?: null;
 }
 
+// 언어 목록 조회
 function get_languages(): array
 {
     $pdo = get_db();
@@ -36,6 +44,7 @@ function get_languages(): array
     return $fallback->fetchAll(PDO::FETCH_COLUMN) ?: [];
 }
 
+// 타자 연습 문장 가져오기
 function get_typing_sentences_indexed(): array
 {
     $pdo = get_db();
@@ -53,6 +62,7 @@ function get_typing_sentences_indexed(): array
     return $result;
 }
 
+// 퀴즈 문제 가져오기
 function get_quiz_questions_indexed(): array
 {
     $pdo = get_db();
@@ -75,6 +85,8 @@ function get_quiz_questions_indexed(): array
     return $result;
 }
 
+// 타자 진행도 업데이트
+// logic: 
 function update_typing_progress(int $userId, int $sentencesCompleted, int $bestSpeed): ?array
 {
     $typed = max(0, $sentencesCompleted);
@@ -99,6 +111,8 @@ function update_typing_progress(int $userId, int $sentencesCompleted, int $bestS
     return fetch_user_profile($userId);
 }
 
+// 퀴즈 진행도 업데이트
+// logic: 퀴즈 1문제 맞추면 total_quiz += 1
 function update_quiz_progress(int $userId, int $correctAnswers): ?array
 {
     $correct = max(0, $correctAnswers);
@@ -119,6 +133,8 @@ function update_quiz_progress(int $userId, int $correctAnswers): ?array
     return fetch_user_profile($userId);
 }
 
+// 레벨 재계산
+// logic: 타자 + 퀴즈 합 100 당 레벨 1 상승
 function recalculate_level(PDO $pdo, int $userId): void
 {
     $stmt = $pdo->prepare(

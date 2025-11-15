@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/**
- * Returns a singleton PDO instance configured from environment variables.
- */
+// 1개의 PDO(DB 연결 객체)를 생성
 function get_db(): PDO
 {
     static $pdo;
