@@ -1,4 +1,4 @@
-/* 둥근모꼴 폰트 사용: 2D 게임 같은 폰트 */
+/* 둥근모꼴 폰트 사용: 2D 게임 효과 */
 @font-face {
     font-family: 'RoundedFixedsys';
     src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_six@1.2/DungGeunMo.woff') format('woff');
@@ -66,18 +66,19 @@ a {
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.app-header.slim {
-
-}
-
 .user-meta {
     text-align: right;
     display: flex;
     flex-direction: column;
     gap: 0.25rem;
-    font-size: 0.9rem;
+    font-size: 1rem;
     align-items: flex-end;
 }
+
+.user-meta .primary.nav-button {
+    font-size: 1.2rem;
+}
+
 
 .user-meta form {
     margin: 0;
@@ -313,7 +314,7 @@ input[type="password"]:focus {
     border: 1px solid var(--surface);
     color: var(--muted);
     padding: 0.6rem 1.5rem;
-    font-size: 0.9rem;
+    font-size: 1.2rem;
     border-radius: 999px;
     display: inline-flex;
     align-items: center;
@@ -341,6 +342,7 @@ input[type="password"]:focus {
     border-color: var(--primary);
     background: var(--surface-alt);
     color: var(--text);
+    box-shadow: 0 3px 15px rgba(100, 50, 150, 0.35);
 }
 
 .hidden {
@@ -364,6 +366,7 @@ input[type="password"]:focus {
     margin: 1rem 0;
     border-radius: 1rem;
     padding: 0.25rem;
+    justify-content: center;
 }
 
 .chip {
@@ -375,20 +378,26 @@ input[type="password"]:focus {
 }
 
 .chip span {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0.35rem 0.9rem;
+    background: rgba(255, 255, 255, 0.05);  
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: var(--text);
+    backdrop-filter: blur(4px);
+    padding: 0.45rem 1rem;
     border-radius: 999px;
-    border: 1px solid transparent;
-    background: var(--surface);
-    color: var(--muted);
-    transition: border-color 0.2s ease, color 0.2s ease;
+    font-size: 0.9rem;
 }
 
 .chip input:checked + span {
     border-color: var(--primary);
     color: var(--text);
+}
+
+.chip:hover span {
+    border-color: var(--primary); 
+    color: var(--text);
+    background: var(--surface-alt);
+    transition: 0.2s;
+    box-shadow: 0 3px 15px rgba(100, 50, 150, 0.35);
 }
 
 .game-stats {
@@ -533,4 +542,50 @@ input[type="password"]:focus {
         width: 100%;
         text-align: center;
     }
+}
+
+#quiz-app,
+#typing-app {
+    width: 100%;
+    max-height: 80%;
+    max-width: 70%;
+    padding: 3.5rem 4rem;
+    margin: 4rem auto; 
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+#quiz-app [data-section],
+#typing-app [data-section] {
+    background: var(--surface);
+    border-radius: 1.5rem;
+    padding: 2rem 2.5rem;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.45);
+    margin-bottom: 2rem;
+}
+
+#quiz-app [data-section="select"],
+#typing-app [data-section="select"] {
+    background: var(--surface);
+    padding: 4rem 5rem;
+    border-radius: 1.5rem;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    text-align: center;
+    min-height: 45vh;
+}
+
+#quiz-app [data-section="select"] p,
+#typing-app [data-section="select"] p {
+    margin-bottom: 2.5rem;  
+}
+
+#quiz-app .chip-list,
+#typing-app .chip-list {
+    margin-bottom: 2.5rem;  
+}
+
+#quiz-app section[data-section="select"] .action-row,
+#typing-app section[data-section="select"] .action-row {
+    margin-top: 2rem;
+    justify-content: center;
 }
