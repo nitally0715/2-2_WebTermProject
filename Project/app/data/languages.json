@@ -1,0 +1,7 @@
+{
+  "languages": [
+    { "id": "C++", "label": "C++" },
+    { "id": "Java", "label": "Java" },
+    { "id": "Python", "label": "Python" }
+  ]
+}

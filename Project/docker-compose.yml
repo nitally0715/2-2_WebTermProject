@@ -1,0 +1,58 @@
+# 세 개의 컨테이너: PHP 웹 서버 + MySQL DB + Node.js 검색 서브시  
+version: '3.9'
+
+services:
+  # web(PHP + Apache 웹 서버[메인 웹사이트])
+  # 연결포트 8080 -> 80
+  web:
+    build: .
+    ports:
+      - '8080:80'
+    # PHP 코드에 사용할 환경 변수들
+    environment:
+      MYSQL_HOST: db
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: jctyping
+      MYSQL_USER: jctyping
+      MYSQL_PASSWORD: secret
+      SEARCH_API_URL: http://search:3000/search
+    depends_on:
+      db:
+        condition: service_healthy
+      search:
+        condition: service_started
+    volumes:
+      - ./app:/var/www/html
+
+  # db(MySQL 데이터베이스 서버)
+  db:
+    # 공식 MySQL 8.0 image 그대로 사용
+    image: mysql:8.0
+    # MySQL 컨테이너 처음 실행 시 생성할 사용자와 DB 설정
+    environment:
+      MYSQL_ROOT_PASSWORD: supersecret
+      MYSQL_DATABASE: jctyping
+      MYSQL_USER: jctyping
+      MYSQL_PASSWORD: secret
+      TZ: Asia/Seoul
+    volumes:
+      - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
+      # 데이터 영구저장: docker compose down 해도 안 사라지도록 
+      # 용량 너무 커질 경우 docker-compose down -v <= 데이터 다 사라짐 
+      - db-data:/var/lib/mysql
+    # 컨테이너 상태 주기적 검사
+    healthcheck:
+      test: ['CMD', 'mysqladmin', 'ping', '-h', 'localhost']
+      interval: 10s
+      retries: 5
+      timeout: 5s
+
+  # search(Node.js 검색 API 서버)
+  search:
+    build:
+      context: ./search-service
+    ports:
+      - '8090:3000'
+
+volumes:
+  db-data:
